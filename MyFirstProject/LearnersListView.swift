@@ -10,6 +10,7 @@ import SwiftUI
 struct LearnersListView: View {
     
     @ObservedObject var myData = sharedData
+    @State var thisControlsIfTheModalIsShowing = false
     
     var body: some View {
         NavigationStack {
@@ -23,9 +24,24 @@ struct LearnersListView: View {
                         }
                     }
                 }
+                .onDelete { index in
+                    myData.learners.remove(atOffsets: index)
+                }
             }
             .navigationTitle("Learners")
+            .toolbar {
+                Button {
+                    thisControlsIfTheModalIsShowing = true
+                } label: {
+                    Image(systemName: "plus")
+                }
+                
+            }
+            .sheet(isPresented: $thisControlsIfTheModalIsShowing) {
+                NewLearnerView()
+            }
         }
+       
     }
     
 }
